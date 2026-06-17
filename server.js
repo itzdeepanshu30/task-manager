@@ -7,37 +7,9 @@ const connectDB = require("./config/db");
 const app = express();
 app.use(express.json());
 
-app.get("/tasks", async (req, res) => {
-    try {
-        const tasks = await Task.find();
+const taskRoutes = require("./routes/taskRoutes");
 
-        res.status(200).json(tasks);
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-});
-
-app.get("/tasks/:id", async (req, res) => {
-    try {
-        const task = await Task.findById(req.params.id);
-
-        if (!task) {
-            return res.status(404).json({
-                message: "Task not found"
-            });
-        }
-
-        res.json(task);
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-});
+app.use("/tasks", taskRoutes);
 
 app.patch("/tasks/:id", async (req, res) => {
     try {
